@@ -13,7 +13,7 @@ export default function Board(props) {
 
   return (
     <>
-      {cards.map((c, i) => <Card key={i} index={i} question={c.question} answer={c.answer} />)}
+      {cards.map((c, i) => <Card key={i} index={i} question={c.question} answer={c.answer} flippedCards={flippedCards} setFlippedCard={setFlippedCards}/>)}
     </>
   )
 
@@ -21,22 +21,27 @@ export default function Board(props) {
 
 function Card(props) {
 
-  const {index, question, answer} = props
+  const {index, question, answer, flippedCards, setFlippedCard} = props
 
-  const [cardFace, setcardFace] = useState("cover")
+  const [cardFace, setCardFace] = useState("cover")
 
   const adjIndex = index + 1
+
+  function flipCard(adjIndex){
+    setCardFace("question")
+    setFlippedCard([...flippedCards, adjIndex])
+  }
 
   return (
     <>
       <Cover load={cardFace === "cover"}>
         <p>Pergunta {adjIndex}</p>
-        <img src={playIcon} onClick={()=>setcardFace("question")}></img>
+        <img src={playIcon} onClick={()=>flipCard(adjIndex)}></img>
       </Cover>
 
       <Question load={cardFace === "question"}>
         <p>{question}</p>
-        <img src={turnIcon} onClick={()=>setcardFace("answer")}></img>
+        <img src={turnIcon} onClick={()=>setCardFace("answer")}></img>
       </Question>
 
       <Answer load={cardFace === "answer"}>

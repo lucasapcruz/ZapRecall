@@ -19,10 +19,10 @@ export default function App() {
                     <img src={logo}></img>
                     <h1>ZapRecall</h1>
                 </LogoContainer>
-                <Board cards={CARDS}/>
+                <Board cards={CARDS} flippedCards={flippedCards} setFlippedCards={setFlippedCards}/>
                 <Footer>
                     <Reactions/>
-                    <StatusIndicator numOfCards={CARDS.length} flippedCards={flippedCards} setFlippedCards={setFlippedCards}/>
+                    <StatusIndicator numOfCards={CARDS.length} flippedCards={flippedCards.length}/>
                 </Footer>
             </ScreenContainer>
         </>

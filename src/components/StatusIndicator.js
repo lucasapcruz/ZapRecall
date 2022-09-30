@@ -4,7 +4,7 @@ export default function StatusIndicator(props) {
 
     return(
         <>
-            <p>{props.flippedCards}/{props.numberOfCards} CONCLUÍDOS</p>
+            <p>{props.flippedCards}/{props.numOfCards} CONCLUÍDOS</p>
         </>
     )
     
