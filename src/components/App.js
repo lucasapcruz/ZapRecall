@@ -2,12 +2,15 @@ import CARDS from "../cards";
 import styled from "styled-components";
 import GlobalStyle from "../globalstyles";
 import { useState } from "react";
-import Deck from "./Deck";
+import Board from "./Board";
 import Reactions from "./Reactions";
 import StatusIndicator from "./StatusIndicator";
 import logo from "../assets/img/logo.png"
 
 export default function App() {
+
+    const [flippedCards, setFlippedCards] = useState([])
+
     return (
         <>
             <GlobalStyle/>
@@ -16,8 +19,10 @@ export default function App() {
                     <img src={logo}></img>
                     <h1>ZapRecall</h1>
                 </LogoContainer>
+                <Board cards={CARDS}/>
                 <Footer>
                     <Reactions/>
+                    <StatusIndicator numOfCards={CARDS.length} flippedCards={flippedCards} setFlippedCards={setFlippedCards}/>
                 </Footer>
             </ScreenContainer>
         </>
