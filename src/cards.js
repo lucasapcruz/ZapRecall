@@ -1,4 +1,4 @@
-const DECK = [
+const CARDS = [
     {question:"O que é JSX?", answer:"Uma extensão de linguagem do JavaScript"},
     {question:"O React é __", answer:"Uma biblioteca JavaScript para construção de interfaces"},
     {question:"Componentes devem iniciar com __", answer:"Letra maiúscula"},
@@ -9,4 +9,4 @@ const DECK = [
     {question:"Usamos estado (state) para __", answer:"dizer para o React quais informações quando atualizadas devem renderizar a tela novamente"}
 ]
 
-export default DECK
+export default CARDS
