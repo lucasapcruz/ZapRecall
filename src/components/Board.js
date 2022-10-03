@@ -1,19 +1,29 @@
 import styled from "styled-components";
 import playIcon from "../assets/img/seta_play.png"
 import turnIcon from "../assets/img/seta_virar.png"
-import rightIcon from "../assets/img/icone_certo.png"
-import wrongIcon from "../assets/img/icone_erro.png"
+import zapIcon from "../assets/img/icone_certo.png"
+import forgotIcon from "../assets/img/icone_erro.png"
 import almostIcon from "../assets/img/icone_quase.png"
 import { useState } from "react";
 
 
 
 export default function Board(props) {
-  const { cards, flippedCards, setFlippedCards } = props
+  const { cards, flippedCards, setFlippedCards, answerFaceLoaded, setAnswerFaceLoaded, currentCard, setCurrentCard, reactionsOfCards} = props
 
   return (
     <>
-      {cards.map((c, i) => <Card key={i} index={i} question={c.question} answer={c.answer} flippedCards={flippedCards} setFlippedCard={setFlippedCards}/>)}
+      {cards.map((c, i) => <Card  key={i} 
+                                  index={i} 
+                                  question={c.question} 
+                                  answer={c.answer}
+                                  currentCard ={currentCard}
+                                  setCurrentCard = {setCurrentCard}
+                                  flippedCards={flippedCards} 
+                                  setFlippedCards={setFlippedCards} 
+                                  answerFaceLoaded={answerFaceLoaded} 
+                                  setAnswerFaceLoaded={setAnswerFaceLoaded}
+                                  reactionsOfCards={reactionsOfCards}/>)}
     </>
   )
 
@@ -21,36 +31,93 @@ export default function Board(props) {
 
 function Card(props) {
 
-  const {index, question, answer, flippedCards, setFlippedCard} = props
+  const {index, question, answer, flippedCards, setFlippedCards, currentCard, setCurrentCard, answerFaceLoaded, setAnswerFaceLoaded, reactionsOfCards} = props
 
   const [cardFace, setCardFace] = useState("cover")
 
   const adjIndex = index + 1
 
-  function flipCard(adjIndex){
+  const reaction = reactionsOfCards[flippedCards.indexOf(adjIndex)]
+
+  function flipToQuestion(adjIndex){
+    setCurrentCard(adjIndex)
     setCardFace("question")
-    setFlippedCard([...flippedCards, adjIndex])
+    setFlippedCards([...flippedCards, adjIndex])
+
+  }
+
+  function flipToAnswer(){
+    setCardFace("answer")
+    setAnswerFaceLoaded(true)
+    console.log(flippedCards.indexOf(adjIndex))
   }
 
   return (
-    <>
-      <Cover load={cardFace === "cover"}>
-        <p>Pergunta {adjIndex}</p>
-        <img src={playIcon} onClick={()=>flipCard(adjIndex)}></img>
+    <div  data-identifier="flashcard">
+      <Cover load={cardFace === "cover"} clickEnabled={currentCard == null}>
+        <p data-identifier="flashcard-index-item">Pergunta {adjIndex}</p>
+        <img src={playIcon} onClick={()=>flipToQuestion(adjIndex)} data-identifier="flashcard-show-btn"></img>
       </Cover>
 
-      <Question load={cardFace === "question"}>
-        <p>{question}</p>
-        <img src={turnIcon} onClick={()=>setCardFace("answer")}></img>
+      <Question load={cardFace === "question" && currentCard == adjIndex}>
+        <p data-identifier="flashcard-question">{question}</p>
+        <img src={turnIcon} onClick={()=>flipToAnswer(adjIndex)} data-identifier="flashcard-turn-btn"></img>
       </Question>
 
-      <Answer load={cardFace === "answer"}>
-        <p>{answer}</p>
+      <Answer load={cardFace === "answer" && currentCard == adjIndex}>
+        <p data-identifier="flashcard-answer">{answer}</p>
       </Answer>
+
+      <AnswerReacted load={flippedCards.includes(adjIndex) && currentCard !== adjIndex} reaction={reaction}>
+        <ReactionContent adjIndex={adjIndex} reaction={reaction}/>
+      </AnswerReacted>
+    </div>
+  )
+}
+
+function ReactionContent(props){
+  const {adjIndex, reaction} = props
+
+  let icon = zapIcon
+
+  switch(reaction){
+    case "zap":
+      icon = zapIcon
+      break
+    case "almost":
+      icon = almostIcon
+      break
+    case "forgot":
+      icon = forgotIcon
+      break
+  }
+
+  return(
+    <>
+      <p>Pergunta {adjIndex}</p>
+      <img src={icon}></img>
     </>
   )
 }
 
+function handleColor(reaction){
+
+  let color
+
+  switch(reaction){
+    case "zap":
+      color = "#2FBE34;"
+      break
+    case "almost":
+      color = "#FF922E;"
+      break
+    case "forgot":
+      color = "#FF3030;"
+      break
+  }
+
+  return(color)
+}
 
 const Cover = styled.div`
     width: 300px;
@@ -60,7 +127,7 @@ const Cover = styled.div`
     padding: 15px;
     box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.15);
     border-radius: 5px;
-    display: ${props => props.load? 'flex':'none'};;
+    display: ${props => props.load? 'flex':'none'};
     align-items: center;
     justify-content: space-between;
 
@@ -71,6 +138,9 @@ const Cover = styled.div`
     font-size: 16px;
     line-height: 19px;
     color: #333333;
+  }
+  img{
+    pointer-events: ${props => props.clickEnabled?'auto':'none'};
   }
 `
 
@@ -107,7 +177,29 @@ const Answer = styled.div`
     padding: 15px;
     box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.15);
     border-radius: 5px;
-    display: ${props => props.load? 'flex':'none'};;
+    display: ${props => props.load? 'flex':'none'};
+    align-items: center;
+    justify-content: space-between;
+
+  p{
+    font-family: 'Recursive';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #333333;
+  }
+`
+
+const AnswerReacted = styled.div`
+    width: 300px;
+    height: 35px;
+    background-color: #FFFFFF;
+    margin: 12px;
+    padding: 15px;
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    display: ${props => props.load? 'flex':'none'};
     align-items: center;
     justify-content: space-between;
 
@@ -117,6 +209,7 @@ const Answer = styled.div`
     font-weight: 700;
     font-size: 16px;
     line-height: 19px;
-    color: #333333;
+    color: ${props => handleColor(props.reaction)};
+    text-decoration: line-through;
   }
 `

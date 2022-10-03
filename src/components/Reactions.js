@@ -1,12 +1,23 @@
 import styled from "styled-components";
 
-export default function Reactions(){
+export default function Reactions(props){
+
+    const {flippedCards, reactionsOfCards, setReactionsOfCards, currentCard, setCurrentCard, answerFaceLoaded, setAnswerFaceLoaded} = props
+
+    function reactToAnswer(reaction){
+        if(answerFaceLoaded){
+            setReactionsOfCards([...reactionsOfCards, reaction])
+            setCurrentCard(null)
+            setAnswerFaceLoaded(false)
+        }
+    }
+
     return(
         <>
             <ButtonsContainer>
-                <ZapReaction>Zap!</ZapReaction>
-                <AlmostReaction>Quase não lembrei!</AlmostReaction>
-                <NahReaction>Não lembrei</NahReaction>
+                <NahReaction onClick={() => reactToAnswer("forgot")} data-identifier="forgot-btn">Não lembrei</NahReaction>
+                <AlmostReaction onClick={() => reactToAnswer("almost")} data-identifier="almost-forgot-btn">Quase não lembrei!</AlmostReaction>
+                <ZapReaction onClick={() => reactToAnswer("zap")} data-identifier="zap-btn">Zap!</ZapReaction>
             </ButtonsContainer>
         </>
     );

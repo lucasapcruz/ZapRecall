@@ -10,6 +10,11 @@ import logo from "../assets/img/logo.png"
 export default function App() {
 
     const [flippedCards, setFlippedCards] = useState([])
+    const [currentCard, setCurrentCard] = useState()
+    const [reactionsOfCards, setReactionsOfCards] = useState([])
+    const [answerFaceLoaded, setAnswerFaceLoaded] = useState(false)
+
+
 
     return (
         <>
@@ -19,9 +24,9 @@ export default function App() {
                     <img src={logo}></img>
                     <h1>ZapRecall</h1>
                 </LogoContainer>
-                <Board cards={CARDS} flippedCards={flippedCards} setFlippedCards={setFlippedCards}/>
+                <Board cards={CARDS} flippedCards={flippedCards} setFlippedCards={setFlippedCards} currentCard={currentCard} setCurrentCard={setCurrentCard} answerFaceLoaded={answerFaceLoaded} setAnswerFaceLoaded={setAnswerFaceLoaded} reactionsOfCards={reactionsOfCards}/>
                 <Footer>
-                    <Reactions/>
+                    <Reactions flippedCards={flippedCards} reactionsOfCards={reactionsOfCards} setReactionsOfCards={setReactionsOfCards} currentCard={currentCard} setCurrentCard={setCurrentCard} answerFaceLoaded={answerFaceLoaded} setAnswerFaceLoaded={setAnswerFaceLoaded}/>
                     <StatusIndicator numOfCards={CARDS.length} flippedCards={flippedCards.length}/>
                 </Footer>
             </ScreenContainer>
