@@ -43,6 +43,7 @@ const Reaction = styled.button`
     text-align: center;
     color: #FFFFFF;
     border-radius: 5px;
+    border: none;
     padding:5px;
 `;
 
