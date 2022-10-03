@@ -95,7 +95,7 @@ function ReactionContent(props){
   return(
     <>
       <p>Pergunta {adjIndex}</p>
-      <img src={icon}></img>
+      <img src={icon} data-identifier="flashcard-status"></img>
     </>
   )
 }
